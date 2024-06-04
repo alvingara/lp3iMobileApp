@@ -13,6 +13,7 @@ import {
 import { MyButton } from '../../components' 
 import { ICFacebook, ICGoogle } from '../../../assets'       
 import React from 'react'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -40,6 +41,10 @@ export default function LoginScreen({navigation}){
       ]);
     }
 
+  }
+
+  const onRegister=()=>{
+    navigation.navigate("RegisterName")
   }
 
   return (
@@ -102,7 +107,9 @@ export default function LoginScreen({navigation}){
 
         <View style={style.containerBottom}>
           <Text>Don't have account? </Text>
+          <TouchableOpacity onPress={onRegister}>
           <Text style={{fontWeight:'bold'}}>Create now</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

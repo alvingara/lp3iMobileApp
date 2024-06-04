@@ -3,21 +3,20 @@ import {
     TouchableOpacity,
     Text,
     StyleSheet
-} from "react-native"
+} from 'react-native'
 
-export const MyButton=(props)=> {
-
-    return (
+export const MyButton=(props)=>{
+    return(
         <TouchableOpacity style={[styles.container, props.style]}>
-        <Image
-            style={styles.iconStyle}
-            source={props.imgUrl} />
-                <Text>{props.text}</Text>
-            </TouchableOpacity>
+            <Image 
+                style={styles.iconStyle}
+                source={props.imgUrl} />
+            <Text>{props.text}</Text>
+        </TouchableOpacity>
     )
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
     container:{
         padding:10,
         borderColor:'#e1e6ed',
@@ -27,5 +26,11 @@ const styles = StyleSheet.create ({
         flex:1,
         flexDirection:'row',
         justifyContent:'center'
+    },
+    iconStyle:{
+        marginRight:5,
+        width:20,
+        height:20,
+        resizeMode:'center'
     }
 })
