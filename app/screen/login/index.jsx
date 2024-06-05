@@ -8,21 +8,24 @@ import {
   Dimensions,
   Image,
   ScrollView,
-  Alert
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';  
-import { MyButton } from '../../components' 
+import { MyButton, FbButton } from '../../components' 
 import { ICFacebook, ICGoogle } from '../../../assets'       
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import ApiLib from "../../lib/Apilib"
 
 const windowWidth = Dimensions.get('window').width;
+
 
 export default function LoginScreen({navigation}){
   const [email, onChangeEmail] = React.useState('')
   const [pasword, onChangePassword] = React.useState('')
-
-  const onSubmitLogin =()=>{
+  const [loading, setLoading] = React.useState(false)
+  const onSubmitLogin =async ()=>{
+    setLoading(true)
     try{
       if(email.trim().length === 0 ){
         throw Error('Email is required')
@@ -32,21 +35,51 @@ export default function LoginScreen({navigation}){
         throw Error('Password is required')
       }
 
-      navigation.navigate('Home')
+      const res =  await ApiLib.post('/action/findOne',{
+              "dataSource": "Cluster0",
+              "database": "app-lp3i-mobile",
+              "collection": "users",
+              "filter": {
+                "email": email,
+                "password": pasword
+              }
+          }
+      )
+      setLoading(false)
+      if(res.data.document != null){
+        navigation.replace("Home")
+      }else{
+        Alert.alert('Error', "Username & password tidak sesuai", [
+          {text: 'OK', onPress: () => {
+            console.log('ERR')
+          }},
+        ]);
+      }
+      
+
     }catch(err){
+      setLoading(false)
       Alert.alert('Error', err.message, [
         {text: 'OK', onPress: () => {
           console.log('ERR')
         }},
       ]);
     }
-
   }
+
 
   const onRegister=()=>{
     navigation.navigate("RegisterName")
   }
 
+  if (loading) {
+    return (
+      <View style={{ flex:1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    )
+  }
+  
   return (
     <ScrollView>
       <View>
@@ -82,9 +115,8 @@ export default function LoginScreen({navigation}){
             placeholderTextColor='#c7c7c7'
             value={pasword}/>
 
-          <Button
+          <FbButton
             onPress={onSubmitLogin}
-            color='#000113'
             title="Login"/>
 
             
@@ -108,7 +140,7 @@ export default function LoginScreen({navigation}){
         <View style={style.containerBottom}>
           <Text>Don't have account? </Text>
           <TouchableOpacity onPress={onRegister}>
-          <Text style={{fontWeight:'bold'}}>Create now</Text>
+            <Text style={{fontWeight:'bold'}}>Create now</Text>
           </TouchableOpacity>
         </View>
       </View>
