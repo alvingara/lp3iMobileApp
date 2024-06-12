@@ -3,27 +3,28 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Button,
   ImageBackground,
   Dimensions,
   Image,
   ScrollView,
   Alert,
-  TouchableOpacity,
-  ActivityIndicator
+  TouchableOpacity
 } from 'react-native';  
 import { MyButton, FbButton } from '../../components' 
 import { ICFacebook, ICGoogle } from '../../../assets'       
 import React from 'react'
 import ApiLib from "../../lib/Apilib"
+import { useDispatch } from 'react-redux'
+import { setId, setFirstName, setSureName } from '../../store/reducer/authReducer'
 
 const windowWidth = Dimensions.get('window').width;
-
 
 export default function LoginScreen({navigation}){
   const [email, onChangeEmail] = React.useState('')
   const [pasword, onChangePassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
+  const dispatch = useDispatch()
+
   const onSubmitLogin =async ()=>{
     setLoading(true)
     try{
@@ -47,7 +48,12 @@ export default function LoginScreen({navigation}){
       )
       setLoading(false)
       if(res.data.document != null){
-        navigation.replace("Home")
+        console.log('data', res.data.document._id)
+        dispatch(setId(res.data.document._id))
+        dispatch(setFirstName(res.data.document.firstName))
+        dispatch(setSureName(res.data.document.sureName))
+
+        navigation.replace("Main")
       }else{
         Alert.alert('Error', "Username & password tidak sesuai", [
           {text: 'OK', onPress: () => {
@@ -72,14 +78,6 @@ export default function LoginScreen({navigation}){
     navigation.navigate("RegisterName")
   }
 
-  if (loading) {
-    return (
-      <View style={{ flex:1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    )
-  }
-  
   return (
     <ScrollView>
       <View>
@@ -116,6 +114,7 @@ export default function LoginScreen({navigation}){
             value={pasword}/>
 
           <FbButton
+            loading={loading}
             onPress={onSubmitLogin}
             title="Login"/>
 

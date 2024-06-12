@@ -1,20 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const registerSlice = createSlice({
-  name: 'regiter',
+  name:'register',
   initialState: {
-   formInput:{
-    firstName: null,
-    sureName: null,
-    gender: null,
-    email: null,
-    password: null,
-    birthDate: null
-   },
-   optGender:[
-    {label:"Laki-Laki", value:"L"},
-    {label:"Perempuan", value:"P"}
-   ]
+    formInput:{
+        firstName: null,
+        sureName: null,
+        gender: null,
+        email: null,
+        password: null,
+        birthDate: null
+    },
+    optGender:[
+        {label:"Laki-laki", value:"L"},
+        {label:"Perempuan", value:"P"}
+    ]
   },
   reducers: {
     setFirstName:(state, action) => {
@@ -35,7 +35,7 @@ export const registerSlice = createSlice({
     setBirthDate:(state, action) => {
         state.formInput.birthDate = action.payload
     },
-    resetRegisterData:(state) => {
+    resetRegisterData:(state) =>{
         state.formInput = {
             firstName: null,
             sureName: null,
@@ -49,7 +49,14 @@ export const registerSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setFirstName, setSureName, setGender,
-     setEmail, setPassword, setBirthDate, resetRegisterData } = registerSlice.actions
+export const { 
+    setFirstName,
+    setSureName,
+    setGender,
+    setEmail,
+    setPassword,
+    setBirthDate,
+    resetRegisterData
+ } = registerSlice.actions
 
 export default registerSlice.reducer
